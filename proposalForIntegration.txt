@@ -1,0 +1,5 @@
+
+https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools | x1xhlol/system-prompts-and-models-of-ai-tools
+https://github.com/microsoft/PromptWizard | microsoft/PromptWizard: Task-Aware Agent-driven Prompt Optimization Framework
+https://github.com/potpie-ai/potpie | potpie-ai/potpie: Prompt-To-Agent : Create custom engineering agents for your codebase
+https://github.com/ManimCommunity/manim | ManimCommunity/manim: A community-maintained Python framework for creating mathematical animations.
