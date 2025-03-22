@@ -1,0 +1,157 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Component Absorption System
+
+## Memory Context
+- Creation Date: ${new Date().toISOString()}
+- Category: Component Management
+- Priority: P1
+- Status: Active Development
+- Related Files: 
+  - master-todo.mdc
+  - documentation-enforcer.mdc
+  - system-health.mdc
+
+## Core Components
+
+### Component Detection
+```typescript
+interface ComponentDetector {
+  patterns: {
+    fileTypes: string[];
+    namingConventions: string[];
+    structurePatterns: string[];
+  };
+  monitoring: {
+    watchPaths: string[];
+    ignorePatterns: string[];
+    scanInterval: number;
+  };
+  classification: {
+    types: string[];
+    rules: ClassificationRule[];
+    confidence: number;
+  };
+}
+```
+
+### Analysis Engine
+```typescript
+interface ComponentAnalyzer {
+  analysis: {
+    dependencies: DependencyAnalysis;
+    quality: QualityMetrics;
+    documentation: DocCoverage;
+    security: SecurityScan;
+  };
+  metrics: {
+    complexity: number;
+    maintainability: number;
+    testability: number;
+    reusability: number;
+  };
+  recommendations: {
+    improvements: string[];
+    risks: string[];
+    opportunities: string[];
+  };
+}
+```
+
+### Integration System
+```typescript
+interface ComponentIntegrator {
+  workflow: {
+    validation: ValidationStep[];
+    testing: TestSuite[];
+    deployment: DeploymentConfig;
+  };
+  safety: {
+    rollback: RollbackConfig;
+    backup: BackupStrategy;
+    monitoring: HealthChecks;
+  };
+  reporting: {
+    format: 'json' | 'markdown' | 'html';
+    metrics: string[];
+    notifications: NotificationConfig[];
+  };
+}
+```
+
+## Implementation Progress
+
+### Completed Components
+- [ ] Component Detection Server
+- [ ] Analysis Pipeline
+- [ ] Integration Workflow
+- [ ] Monitoring System
+
+### Active Work
+- [ ] Pattern Recognition Engine
+- [ ] Classification System
+- [ ] Quality Assessment
+- [ ] Documentation Generator
+
+### Pending Tasks
+- [ ] Automated Testing
+- [ ] Performance Optimization
+- [ ] Security Hardening
+- [ ] User Interface
+
+## Knowledge Graph Integration
+
+### Tags
+- #component-management
+- #automation
+- #integration
+- #analysis
+- #monitoring
+
+### Relationships
+- Depends on: Knowledge Graph, Documentation Enforcer, System Health
+- Enhances: Development Workflow, Code Quality, System Stability
+- Monitors: Component Health, Integration Status, System Performance
+
+## Success Metrics
+
+### Detection Metrics
+- Accuracy: > 95%
+- False Positives: < 5%
+- Detection Time: < 5s
+
+### Analysis Metrics
+- Completion Time: < 30s
+- Coverage: 100%
+- Quality Score: > 80%
+
+### Integration Metrics
+- Success Rate: > 98%
+- Rollback Time: < 10s
+- System Stability: > 99.9%
+
+## Learning & Adaptation
+
+### Update Triggers
+- New component detection
+- Analysis completion
+- Integration events
+- System health changes
+
+### Adaptation Rules
+- Pattern recognition updates
+- Classification refinement
+- Quality threshold adjustments
+- Integration workflow optimization
+
+## Version History
+- v1.0.0 - Initial component absorption system definition
+- Current: v1.0.0
+
+## Last Update
+- Timestamp: ${new Date().toISOString()}
+- Type: System Creation
+- Changes: Created comprehensive component absorption system definition 

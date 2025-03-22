@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Engineering Mode
+- [Text Cleanup Tool Development](mdc:.cursor/memory/engineering-workflow-example.mdc) - Example of proper engineering workflow showing context-aware text replacement tool development
+- [Text Cleanup System Integration](mdc:.cursor/memory/text-cleanup-system-integration.mdc) - Details how the text-cleanup tool integrates with other Ollama ecosystem components
+- [Text Cleanup Testing Strategy](mdc:.cursor/memory/text-cleanup-testing-strategy.mdc) - Comprehensive testing strategy for the text-cleanup.js tool
+- [Text Cleanup Technical Specification](mdc:.cursor/memory/text-cleanup-technical-specification.mdc) - Technical specification for the text-cleanup.js tool 

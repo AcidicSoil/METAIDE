@@ -1,0 +1,234 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# CLI Voice Integration Task
+
+## Overview
+
+**Priority**: P1  
+**Status**: NOT STARTED  
+**Tags**: #integration #voice #cli #llm #memory
+
+This task focuses on integrating complete control through the CLI engine, including LLM integration with memory and knowledge base controls via text support and text-to-speech (TTS) capabilities.
+
+## Timeline
+
+**Week 1**: Research and Architecture  
+**Week 2**: Core Implementation  
+**Week 3**: Integration and Testing
+
+## Detailed Description
+
+The CLI Voice Integration will enable users to interact with the Ollama ecosystem through voice commands and receive spoken responses, while maintaining the context awareness and memory capabilities of the existing system. This integration will leverage the existing Tag System and Contextual Awareness Engine to provide a seamless experience across text and voice interfaces.
+
+### Core Components
+
+#### 1. Speech Recognition Integration
+
+- **Primary Option**: Whisper running locally via Ollama
+  - Implement Python wrapper with WebSocket streaming for real-time transcription
+  - Add support for wake word detection
+  - Create fallback options using Web Speech API or Vosk
+
+#### 2. Text-to-Speech Engine
+
+- **Primary Options**:
+  - Piper - Offline TTS with natural voices
+  - Coqui TTS - Local high-quality voices
+- **Integration Pattern**:
+  - Implement as a service with RESTful and WebSocket APIs
+  - Cache common responses for performance
+  - Support voice customization per application
+
+#### 3. CLI Command Extensions
+
+- Add voice-specific commands to the existing CLI
+- Implement streaming audio input/output
+- Create configuration options for voice settings
+- Add support for voice profiles and customization
+
+#### 4. Memory and Knowledge Base Integration
+
+- Extend the Context Router to handle voice interactions
+- Implement memory-enhanced voice commands
+- Create voice-specific context tracking
+- Add support for voice-based learning and feedback
+
+## Integration Points
+
+### 1. Ollama Tag CLI Integration
+
+```typescript
+// Example CLI command structure
+program
+  .command('voice')
+  .description('Voice interaction with Ollama')
+  .option('-l, --listen', 'Listen for voice commands')
+  .option('-s, --speak <text>', 'Speak the provided text')
+  .option('-w, --wake-word <word>', 'Set custom wake word')
+  .option('-m, --model <model>', 'Set TTS/STT model')
+  .option('--memory', 'Enable memory enhancement')
+  .action(async (options) => {
+    // Implementation
+  });
+```
+
+### 2. Context Router Enhancement
+
+```typescript
+// Add voice context to the Context Router
+contextRouter.addVoiceContext({
+  voiceProfile: 'default',
+  speakingRate: 1.0,
+  voiceType: 'female',
+  lastInteraction: Date.now()
+});
+```
+
+### 3. Voice Command Framework
+
+```json
+{
+  "voice_task": {
+    "name": "process_voice_command",
+    "config": {
+      "wake_words": ["hey ollama", "computer", "assistant"],
+      "listening_timeout": 10,
+      "confidence_threshold": 0.75
+    },
+    "steps": [
+      {
+        "name": "listen_for_command",
+        "operator": "listen",
+        "args": {
+          "duration": 5
+        },
+        "returns": "audio_input"
+      },
+      {
+        "name": "transcribe_command",
+        "operator": "transcribe",
+        "args": {
+          "audio": "$audio_input",
+          "model": "whisper"
+        },
+        "returns": "text_command"
+      },
+      {
+        "name": "detect_intent",
+        "operator": "llm",
+        "args": {
+          "prompt": "Determine the user intent from: $text_command",
+          "model": "llama3.2:8b"
+        },
+        "returns": "intent"
+      },
+      {
+        "name": "route_to_application",
+        "operator": "router",
+        "args": {
+          "intent": "$intent",
+          "routes": {
+            "home_control": "ollama_home_control_workflow",
+            "knowledge_query": "ollama_hub_workflow",
+            "assistant": "ollama_voice_workflow"
+          }
+        },
+        "returns": "application_response"
+      },
+      {
+        "name": "speak_response",
+        "operator": "speak",
+        "args": {
+          "text": "$application_response",
+          "voice": "en_female_1"
+        }
+      }
+    ]
+  }
+}
+```
+
+## Implementation Plan
+
+### Week 1: Research and Architecture
+
+- [ ] Research and evaluate TTS options (Piper, Coqui TTS)
+- [ ] Research and evaluate STT options (Whisper, Web Speech API, Vosk)
+- [ ] Design CLI command structure for voice interactions
+- [ ] Create architecture diagram for voice integration
+- [ ] Define API contracts for voice services
+- [ ] Evaluate hardware requirements and limitations
+
+### Week 2: Core Implementation
+
+- [ ] Implement Speech Recognition service
+- [ ] Implement Text-to-Speech service
+- [ ] Create CLI command extensions
+- [ ] Implement WebSocket streaming for audio
+- [ ] Add configuration options for voice settings
+- [ ] Create voice profile management
+
+### Week 3: Integration and Testing
+
+- [ ] Integrate with Context Router
+- [ ] Implement memory-enhanced voice commands
+- [ ] Add voice-specific context tracking
+- [ ] Create voice-based learning and feedback
+- [ ] Test with various hardware configurations
+- [ ] Optimize performance and reduce latency
+- [ ] Document usage and configuration options
+
+## Dependencies
+
+- Ollama Tag CLI
+- Context Router
+- Memory Service
+- Knowledge Graph MCP Server
+- Python environment for TTS/STT libraries
+- WebSocket server for streaming audio
+
+## Success Metrics
+
+- Voice commands are accurately transcribed (>90% accuracy)
+- TTS output is natural and clear
+- Context is maintained across voice interactions
+- Memory enhancement improves response quality over time
+- CLI commands work seamlessly with voice input/output
+- System works offline without internet connectivity
+- Low latency (<1s) for voice responses
+
+## Risk Mitigation
+
+- **Hardware Compatibility**: Test with various microphone/speaker setups
+- **Performance**: Implement caching and optimization for low-latency responses
+- **Privacy**: Ensure all processing happens locally without data leaving the system
+- **Fallback Mechanisms**: Provide text-based fallbacks for all voice features
+- **Accessibility**: Support multiple languages and accents
+
+## Research Notes
+
+### TTS Options Comparison
+
+| Engine | Pros | Cons | Integration Complexity |
+|--------|------|------|------------------------|
+| Piper | Offline, natural voices | Limited voice options | Medium |
+| Coqui TTS | High quality, customizable | Resource intensive | High |
+| Browser TTS | Easy integration | Internet required | Low |
+
+### STT Options Comparison
+
+| Engine | Pros | Cons | Integration Complexity |
+|--------|------|------|------------------------|
+| Whisper | High accuracy, offline | Resource intensive | Medium |
+| Web Speech API | Easy integration | Internet required | Low |
+| Vosk | Lightweight, offline | Lower accuracy | Medium |
+
+## References
+
+- [Voice Integration for Ollama Ecosystem](mdc:OSPAiN2/docs/voice_integration.md)
+- [Ollama Ecosystem Design Schematics](mdc:OSPAiN2/docs/design_schematics.md)
+- [Contextual Awareness Engine](mdc:OSPAiN2/docs/contextual_awareness_engine.md)
+- [Tag System Guidelines](mdc:OSPAiN2/docs/tag_system_guidelines.md) 

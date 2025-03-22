@@ -1,0 +1,210 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Absorption Feature System
+
+## Core Components
+
+### Component Detector
+```typescript
+interface ComponentDetector {
+  detection: {
+    patterns: {
+      fileTypes: string[];
+      namingConventions: RegExp[];
+      structurePatterns: {
+        imports: RegExp[];
+        exports: RegExp[];
+        componentPatterns: RegExp[];
+      };
+    };
+    scanning: {
+      directories: string[];
+      excludePatterns: string[];
+      recursive: boolean;
+    };
+  };
+  analysis: {
+    static: {
+      dependencies: boolean;
+      interfaces: boolean;
+      types: boolean;
+    };
+    dynamic: {
+      runtime: boolean;
+      usage: boolean;
+      performance: boolean;
+    };
+  };
+}
+```
+
+### Component Analyzer
+```typescript
+interface ComponentAnalyzer {
+  analysis: {
+    structure: {
+      complexity: number;
+      dependencies: string[];
+      interfaces: string[];
+    };
+    quality: {
+      maintainability: number;
+      reusability: number;
+      testability: number;
+    };
+    integration: {
+      compatibility: string[];
+      conflicts: string[];
+      suggestions: string[];
+    };
+  };
+  insights: {
+    patterns: string[];
+    improvements: string[];
+    risks: string[];
+  };
+}
+```
+
+### Component Indexer
+```typescript
+interface ComponentIndexer {
+  indexing: {
+    metadata: {
+      name: string;
+      type: string;
+      location: string;
+      dependencies: string[];
+      lastModified: string;
+    };
+    content: {
+      source: string;
+      documentation: string;
+      tests: string[];
+    };
+    relationships: {
+      imports: string[];
+      exports: string[];
+      uses: string[];
+      usedBy: string[];
+    };
+  };
+  search: {
+    byType: (type: string) => Component[];
+    byDependency: (dependency: string) => Component[];
+    byPattern: (pattern: RegExp) => Component[];
+  };
+}
+```
+
+### Component Processor
+```typescript
+interface ComponentProcessor {
+  processing: {
+    validation: {
+      structure: boolean;
+      dependencies: boolean;
+      types: boolean;
+    };
+    optimization: {
+      performance: boolean;
+      size: boolean;
+      dependencies: boolean;
+    };
+    documentation: {
+      generate: boolean;
+      update: boolean;
+      validate: boolean;
+    };
+  };
+  actions: {
+    refactor: (component: Component) => Promise<void>;
+    optimize: (component: Component) => Promise<void>;
+    document: (component: Component) => Promise<void>;
+  };
+}
+```
+
+### Integration System
+```typescript
+interface IntegrationSystem {
+  integration: {
+    detection: {
+      autoDetect: boolean;
+      patterns: string[];
+      validation: boolean;
+    };
+    processing: {
+      analysis: boolean;
+      optimization: boolean;
+      documentation: boolean;
+    };
+    reporting: {
+      generate: boolean;
+      format: 'json' | 'markdown' | 'html';
+      notifications: boolean;
+    };
+  };
+  workflow: {
+    onDetection: (component: Component) => Promise<void>;
+    onAnalysis: (analysis: Analysis) => Promise<void>;
+    onIntegration: (component: Component) => Promise<void>;
+  };
+}
+```
+
+## Usage Examples
+
+### Basic Component Detection
+```typescript
+const detector = new ComponentDetector({
+  detection: {
+    patterns: {
+      fileTypes: ['.ts', '.tsx', '.js', '.jsx'],
+      namingConventions: [/^[A-Z][a-zA-Z]*\.(ts|tsx)$/],
+      structurePatterns: {
+        imports: [/^import\s+.*from\s+['"].*['"]/],
+        exports: [/^export\s+(default\s+)?(class|function|const)/],
+        componentPatterns: [/React\.(FC|Component)/]
+      }
+    }
+  }
+});
+
+const components = await detector.scan('src/components');
+```
+
+### Component Analysis
+```typescript
+const analyzer = new ComponentAnalyzer();
+const analysis = await analyzer.analyze(component);
+
+console.log('Complexity:', analysis.structure.complexity);
+console.log('Maintainability:', analysis.quality.maintainability);
+console.log('Integration Suggestions:', analysis.integration.suggestions);
+```
+
+### Component Processing
+```typescript
+const processor = new ComponentProcessor({
+  processing: {
+    validation: true,
+    optimization: true,
+    documentation: true
+  }
+});
+
+await processor.process(component);
+```
+
+## Version History
+- v1.0.0 - Initial absorption feature system
+- Current: v1.0.0
+
+## Last Update
+- Timestamp: ${new Date().toISOString()}
+- Type: System Creation
+- Changes: Created comprehensive component absorption system 

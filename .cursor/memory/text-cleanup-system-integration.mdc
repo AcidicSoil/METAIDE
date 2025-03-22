@@ -1,0 +1,218 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: System integration specifications for text-cleanup.js tool
+globs: text-cleanup.js,*/text-cleanup*
+alwaysApply: false
+---
+# Text Cleanup Tool: System Integration
+
+This document details how the text-cleanup.js tool integrates with other components in the Ollama Ecosystem.
+
+## Integration Architecture
+
+```mermaid
+graph TD
+    A[text-cleanup.js] --> B[T2P CLI]
+    A --> C[CI/CD Pipeline]
+    A --> D[Knowledge Graph]
+    E[Master Todo System] --> A
+    A --> F[Documentation System]
+    
+    subgraph "Core Components"
+        A
+    end
+    
+    subgraph "Integration Points"
+        B
+        C
+        D
+        E
+        F
+    end
+```
+
+## T2P CLI Integration
+
+The text-cleanup tool serves as a migration utility for the T2P CLI, providing:
+
+- Consistent transformation of `ollama-tag-cli` references to `t2p`
+- Context-aware replacement based on surrounding code
+- Documentation updates for the migration process
+
+**Integration Files:**
+- `t2p/docs/text-cleanup-integration.md` - Documentation for migration process
+- Updates to `t2p/README.md` - References to migration capabilities
+
+**Usage Patterns:**
+```bash
+# From T2P CLI scripts
+node ../text-cleanup.js --pattern "ollama-tag-cli" --smart --report "./migration-report.md"
+```
+
+## CI/CD Pipeline Integration
+
+The tool integrates with the CI/CD pipeline through GitHub Actions:
+
+**Integration Points:**
+- `.github/workflows/text-cleanup.yml` - Workflow definition
+- Automated testing on multiple Node.js versions
+- Generation of consistency reports as artifacts
+- Warning thresholds for inconsistencies
+
+**CI/CD Flow:**
+1. Code push triggers workflow
+2. Tests run against text-cleanup.js
+3. Dry-run analysis generates reports
+4. Reports are stored as artifacts
+5. Warnings are triggered if inconsistencies exceed threshold
+
+## Knowledge Graph Integration
+
+The text-cleanup tool is indexed in the project's knowledge graph:
+
+**Integration Points:**
+- `.cursor/memory/engineering-workflow-example.mdc` - Workflow documentation
+- `.cursor/memory/knowledge-index.mdc` - Knowledge graph entry
+
+**Metadata Stored:**
+- Tool capabilities
+- Implementation workflow
+- Engineering best practices
+- File locations
+- Integration documentation
+
+## Master Todo System Integration
+
+The tool was tracked in the master todo system:
+
+**Integration Points:**
+- `@master-todo.mdc` - Task tracking
+- Status updates for completed development milestones
+
+**Task Records:**
+- Initial implementation
+- Enhanced context detection
+- Unit test development
+- CI/CD integration
+
+## Documentation System Integration
+
+The tool is documented in the project's documentation system:
+
+**Integration Points:**
+- `docs/text-cleanup.md` - Main documentation
+- `t2p/docs/text-cleanup-integration.md` - T2P integration guide
+- `text-cleanup-status-update.md` - Status report
+
+**Documentation Standards:**
+- Consistent structure with other tools
+- Examples for common use cases
+- API documentation for options
+- Integration guides
+- Troubleshooting sections
+
+## Execution Model
+
+The text-cleanup tool operates both as:
+
+1. **Standalone Utility:**
+   - Direct command-line usage
+   - Manual execution for targeted fixes
+
+2. **Integrated Component:**
+   - Used by other scripts/tools
+   - Executed as part of CI/CD pipeline
+   - Referenced in documentation
+
+## Data Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant TextCleanup
+    participant FileSystem
+    participant ReportGenerator
+    participant GithubActions
+    
+    User->>TextCleanup: Run with options
+    TextCleanup->>FileSystem: Search files
+    FileSystem->>TextCleanup: Return file contents
+    TextCleanup->>TextCleanup: Analyze context
+    TextCleanup->>FileSystem: Apply changes (if not dry run)
+    TextCleanup->>ReportGenerator: Generate report
+    ReportGenerator->>FileSystem: Save report
+    
+    alt CI/CD Pipeline
+        GithubActions->>TextCleanup: Run in dry-run mode
+        TextCleanup->>ReportGenerator: Generate report
+        ReportGenerator->>GithubActions: Save as artifact
+    end
+```
+
+## Extension Points
+
+The text-cleanup tool provides several extension points:
+
+1. **Context Analysis Function:**
+   - Add new context patterns in `analyzeContext` function
+   - Enhance detection for specific file types
+
+2. **Report Format:**
+   - Modify report generation for different formats
+   - Add custom sections to reports
+
+3. **File Processing:**
+   - Customize file discovery patterns
+   - Add specialized processing for specific file types
+
+4. **CI/CD Integration:**
+   - Add custom thresholds for warnings
+   - Integrate with other CI tools
+
+## Configuration Management
+
+Configuration is managed through:
+
+1. **Command-line Options:**
+   - Runtime configuration through CLI flags
+   - Default values provided for common scenarios
+
+2. **GitHub Actions Workflow:**
+   - Configured through YAML definition
+   - Environment-specific settings
+
+## Future System Integration
+
+Planned future integration points:
+
+1. **IDE Extensions:**
+   - Integration with VS Code extensions
+   - Inline replacement suggestions
+
+2. **Pre-commit Hook:**
+   - Automatic check before git commits
+   - Prevention of inconsistent naming
+
+3. **Automated Refactoring Pipeline:**
+   - Integration with larger refactoring workflows
+   - Chainable transformations
+
+## Integration Testing
+
+System integration is tested through:
+
+1. **End-to-end Tests:**
+   - Full pipeline execution tests
+   - Integration with GitHub Actions
+
+2. **Module Interaction Tests:**
+   - Tests for interaction with other tools
+   - Verification of report consumption
+
+3. **Configuration Tests:**
+   - Validation of different configuration options
+   - Verification of extension point behaviors 

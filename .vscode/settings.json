@@ -1,0 +1,7 @@
+{
+	"files.autoSave": "onWindowChange",
+	"notebook.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.wordWrap": "on",
+	"git.ignoreLimitWarning": true,
+	"CodeGPT.apiKey": "Ollama"
+}

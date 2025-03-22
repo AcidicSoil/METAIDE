@@ -1,0 +1,759 @@
+{
+	// ... existing code ...
+	"tools": [
+		// Content Summarization Tools
+		{
+			"name": "summarize",
+			"description": "Summarizes text with various style options using local LLM",
+			"server": "Content Summarizer",
+			"inputs": [
+				{
+					"name": "text",
+					"type": "string",
+					"description": "The text to summarize",
+					"required": true
+				},
+				{
+					"name": "maxLength",
+					"type": "number",
+					"description": "Maximum length of the summary in words",
+					"default": 200
+				},
+				{
+					"name": "language",
+					"type": "string",
+					"description": "Language for the summary",
+					"default": "en"
+				},
+				{
+					"name": "style",
+					"type": "string",
+					"description": "Summary style (default, technical, executive, bullet, tldr, academic, critical, eli5)",
+					"default": "default"
+				}
+			],
+			"output": {
+				"type": "string",
+				"description": "Summarized text"
+			}
+		},
+		{
+			"name": "summarize_text",
+			"description": "Summarizes text using configured templates",
+			"server": "Prompt Engineering Assistant",
+			"inputs": [
+				{
+					"name": "text",
+					"type": "string",
+					"description": "The text to summarize",
+					"required": true
+				},
+				{
+					"name": "template",
+					"type": "string",
+					"description": "Template name to use (default, technical, executive, bullet, tldr)",
+					"default": "default"
+				},
+				{
+					"name": "max_length",
+					"type": "number",
+					"description": "Maximum length of summary",
+					"default": 200
+				}
+			],
+			"output": {
+				"type": "string",
+				"description": "Summarized text"
+			}
+		},
+		
+		// Docker Tools
+		{
+			"name": "docker_exec",
+			"description": "Executes a command in a running Docker container",
+			"server": "Docker Integration",
+			"inputs": [
+				{
+					"name": "container",
+					"type": "string",
+					"description": "Container ID or name",
+					"required": true
+				},
+				{
+					"name": "command",
+					"type": "string",
+					"description": "Command to execute",
+					"required": true
+				},
+				{
+					"name": "timeout",
+					"type": "number",
+					"description": "Command timeout in milliseconds",
+					"default": 10000
+				}
+			],
+			"output": {
+				"type": "string",
+				"description": "Command output"
+			}
+		},
+		
+		// Automation Tools
+		{
+			"name": "mouse_click",
+			"description": "Performs a mouse click at the specified coordinates",
+			"server": "Mouse Automation",
+			"inputs": [
+				{
+					"name": "x",
+					"type": "number",
+					"description": "X coordinate",
+					"required": true
+				},
+				{
+					"name": "y",
+					"type": "number",
+					"description": "Y coordinate",
+					"required": true
+				},
+				{
+					"name": "button",
+					"type": "string",
+					"description": "Mouse button to click (left, right, middle)",
+					"default": "left"
+				},
+				{
+					"name": "double",
+					"type": "boolean",
+					"description": "Whether to perform a double-click",
+					"default": false
+				}
+			],
+			"output": {
+				"type": "boolean",
+				"description": "Success status"
+			}
+		},
+		{
+			"name": "keyboard_press",
+			"description": "Simulates a keyboard key press or types text",
+			"server": "Mouse Automation",
+			"inputs": [
+				{
+					"name": "key",
+					"type": "string",
+					"description": "Key to press (e.g., 'a', 'enter', 'escape', 'f1')",
+					"required": true
+				},
+				{
+					"name": "modifier",
+					"type": "string",
+					"description": "Modifier key (e.g., 'ctrl', 'alt', 'shift', 'command')"
+				},
+				{
+					"name": "text",
+					"type": "string",
+					"description": "Text to type instead of a single key"
+				}
+			],
+			"output": {
+				"type": "boolean",
+				"description": "Success status"
+			}
+		},
+		
+		// Knowledge Graph Tools
+		{
+			"name": "search_memory",
+			"description": "Searches the Knowledge Graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "query",
+					"type": "string",
+					"description": "Search query",
+					"required": true
+				},
+				{
+					"name": "limit",
+					"type": "number",
+					"description": "Maximum number of results",
+					"default": 10
+				},
+				{
+					"name": "types",
+					"type": "array",
+					"description": "Filter by node types",
+					"default": []
+				},
+				{
+					"name": "include_relations",
+					"type": "boolean",
+					"description": "Include relations in results",
+					"default": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Search results with nodes and relations"
+			}
+		},
+		{
+			"name": "create_entity",
+			"description": "Creates a new entity in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "name",
+					"type": "string",
+					"description": "Name of the entity",
+					"required": true
+				},
+				{
+					"name": "type",
+					"type": "string",
+					"description": "Type of the entity (e.g., person, concept, tool)",
+					"required": true
+				},
+				{
+					"name": "observations",
+					"type": "array",
+					"description": "Initial observations about the entity",
+					"default": []
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "Additional metadata for the entity",
+					"default": {}
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Created entity information"
+			}
+		},
+		{
+			"name": "create_relation",
+			"description": "Creates a relationship between two entities",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "from",
+					"type": "string",
+					"description": "Name of the source entity",
+					"required": true
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"description": "Name of the target entity",
+					"required": true
+				},
+				{
+					"name": "type",
+					"type": "string",
+					"description": "Type of relationship (e.g., depends_on, contains, created_by)",
+					"required": true
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "Additional metadata for the relationship",
+					"default": {}
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Created relationship information"
+			}
+		},
+		{
+			"name": "add_observation",
+			"description": "Adds an observation to an existing entity",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "entity",
+					"type": "string",
+					"description": "Name of the entity",
+					"required": true
+				},
+				{
+					"name": "observation",
+					"type": "string",
+					"description": "Observation text to add",
+					"required": true
+				},
+				{
+					"name": "source",
+					"type": "string",
+					"description": "Source of the observation",
+					"default": "user"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Updated entity information"
+			}
+		},
+		{
+			"name": "search_entities",
+			"description": "Searches for entities in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "query",
+					"type": "string",
+					"description": "Search query",
+					"required": true
+				},
+				{
+					"name": "types",
+					"type": "array",
+					"description": "Filter by entity types",
+					"default": []
+				},
+				{
+					"name": "limit",
+					"type": "number",
+					"description": "Maximum number of results",
+					"default": 10
+				},
+				{
+					"name": "include_observations",
+					"type": "boolean",
+					"description": "Include entity observations in results",
+					"default": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Search results with matching entities"
+			}
+		},
+		{
+			"name": "get_entity",
+			"description": "Retrieves detailed information about an entity",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "name",
+					"type": "string",
+					"description": "Name of the entity to retrieve",
+					"required": true
+				},
+				{
+					"name": "include_relations",
+					"type": "boolean",
+					"description": "Include relationships in the result",
+					"default": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Entity information including observations and relationships"
+			}
+		},
+		{
+			"name": "create_entities",
+			"description": "Create multiple new entities in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "entities",
+					"type": "array",
+					"description": "Array of entity definitions to create",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of entity creation operations"
+			}
+		},
+		{
+			"name": "create_relations",
+			"description": "Create multiple new relations between entities in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "relations",
+					"type": "array",
+					"description": "Array of relation definitions to create",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of relation creation operations"
+			}
+		},
+		{
+			"name": "add_observations",
+			"description": "Add new observations to existing entities in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "observations",
+					"type": "array",
+					"description": "Array of observations to add",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of observation addition operations"
+			}
+		},
+		{
+			"name": "delete_entities",
+			"description": "Delete multiple entities and their associated relations from the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "entities",
+					"type": "array",
+					"description": "Names of entities to delete",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of entity deletion operations"
+			}
+		},
+		{
+			"name": "delete_observations",
+			"description": "Delete specific observations from entities in the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "entity",
+					"type": "string",
+					"description": "Entity name",
+					"required": true
+				},
+				{
+					"name": "observation_ids",
+					"type": "array",
+					"description": "IDs of observations to delete",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of observation deletion operations"
+			}
+		},
+		{
+			"name": "delete_relations",
+			"description": "Delete multiple relations from the knowledge graph",
+			"server": "Knowledge Graph",
+			"inputs": [
+				{
+					"name": "relation_ids",
+					"type": "array",
+					"description": "IDs of relations to delete",
+					"required": true
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Results of relation deletion operations"
+			}
+		},
+		
+		// Repository Tools
+		{
+			"name": "pack_repository",
+			"description": "Pack a Git repository into an AI-friendly format for context generation using Repomix",
+			"server": "Repository Tools",
+			"inputs": [
+				{
+					"name": "repoUrl",
+					"type": "string",
+					"description": "URL of the Git repository to pack",
+					"required": true
+				},
+				{
+					"name": "format",
+					"type": "string",
+					"enum": ["json", "markdown", "plain"],
+					"description": "Output format for the packed repository",
+					"default": "json"
+				},
+				{
+					"name": "branch",
+					"type": "string",
+					"description": "Branch to pack",
+					"default": "main"
+				},
+				{
+					"name": "excludePaths",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Paths to exclude from the packed repository"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Packed repository data"
+			}
+		},
+		{
+			"name": "analyze_repository",
+			"description": "Analyze a Git repository to extract insights and structure using GitIngest",
+			"server": "Repository Tools",
+			"inputs": [
+				{
+					"name": "repoUrl",
+					"type": "string",
+					"description": "URL of the Git repository to analyze",
+					"required": true
+				},
+				{
+					"name": "branch",
+					"type": "string",
+					"description": "Branch to analyze",
+					"default": "main"
+				},
+				{
+					"name": "depth",
+					"type": "number",
+					"description": "Depth of analysis (1-5)",
+					"default": 1
+				},
+				{
+					"name": "analysisType",
+					"type": "string",
+					"enum": ["full", "structure", "dependencies", "code"],
+					"description": "Type of analysis to perform",
+					"default": "full"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Repository analysis results"
+			}
+		},
+		{
+			"name": "fetch_code",
+			"description": "Fetch specific code files or snippets from a repository using CodeFetch",
+			"server": "Repository Tools",
+			"inputs": [
+				{
+					"name": "repoUrl",
+					"type": "string",
+					"description": "URL of the Git repository",
+					"required": true
+				},
+				{
+					"name": "path",
+					"type": "string",
+					"description": "Path to the file or directory to fetch",
+					"required": true
+				},
+				{
+					"name": "branch",
+					"type": "string",
+					"description": "Branch to fetch from",
+					"default": "main"
+				},
+				{
+					"name": "outputFormat",
+					"type": "string",
+					"enum": ["text", "json", "markdown"],
+					"description": "Format for the fetched code",
+					"default": "text"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Fetched code files or snippets"
+			}
+		},
+		{
+			"name": "generate_context",
+			"description": "Generate context from a repository for use in prompts and conversations",
+			"server": "Repository Tools",
+			"inputs": [
+				{
+					"name": "repoUrl",
+					"type": "string",
+					"description": "URL of the Git repository",
+					"required": true
+				},
+				{
+					"name": "contextType",
+					"type": "string",
+					"enum": [
+						"default",
+						"code",
+						"architecture",
+						"dependencies",
+						"general"
+					],
+					"description": "Type of context to generate",
+					"default": "default"
+				},
+				{
+					"name": "depth",
+					"type": "number",
+					"description": "Depth of context (1-5, higher means more detailed)",
+					"default": 2
+				},
+				{
+					"name": "format",
+					"type": "string",
+					"enum": ["json", "markdown", "plain"],
+					"description": "Format for the context",
+					"default": "json"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Generated context for the repository"
+			}
+		},
+		{
+			"name": "list_cached_repos",
+			"description": "List repositories that have been processed and cached",
+			"server": "Repository Tools",
+			"parameters": {
+				"type": "object",
+				"properties": {}
+			},
+			"output": {
+				"type": "array",
+				"description": "List of cached repositories"
+			}
+		},
+		{
+			"name": "clear_cache",
+			"description": "Clear cached repository data",
+			"server": "Repository Tools",
+			"inputs": [
+				{
+					"name": "repoUrl",
+					"type": "string",
+					"description": "URL of the repository to clear (omit to clear all)"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Result of cache clearing operation"
+			}
+		},
+		
+		// Component Analysis Tools
+		{
+			"name": "detect_component",
+			"description": "Detects and analyzes new components in the codebase",
+			"server": "Component Absorption",
+			"inputs": [
+				{
+					"name": "path",
+					"type": "string",
+					"description": "Path to analyze for components",
+					"required": true
+				},
+				{
+					"name": "type",
+					"type": "string",
+					"description": "Type of component to detect",
+					"default": "auto"
+				},
+				{
+					"name": "depth",
+					"type": "number",
+					"description": "Analysis depth",
+					"default": 3
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Component analysis results"
+			}
+		},
+		{
+			"name": "analyze_component",
+			"description": "Performs detailed analysis of a detected component",
+			"server": "Component Absorption",
+			"inputs": [
+				{
+					"name": "componentId",
+					"type": "string",
+					"description": "ID of the component to analyze",
+					"required": true
+				},
+				{
+					"name": "analysisType",
+					"type": "string",
+					"description": "Type of analysis to perform",
+					"default": "full"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Detailed component analysis"
+			}
+		},
+		{
+			"name": "integrate_component",
+			"description": "Integrates a detected component into the system",
+			"server": "Component Absorption",
+			"inputs": [
+				{
+					"name": "componentId",
+					"type": "string",
+					"description": "ID of the component to integrate",
+					"required": true
+				},
+				{
+					"name": "integrationOptions",
+					"type": "object",
+					"description": "Integration configuration options",
+					"default": {}
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Integration results"
+			}
+		},
+		
+		// Web Search Tools
+		{
+			"name": "web_search_optimized",
+			"description": "Performs efficient web searches with the Brave Search API, conserving API usage",
+			"server": "Brave Search MCP",
+			"inputs": [
+				{
+					"name": "query",
+					"type": "string",
+					"description": "The search query",
+					"required": true
+				},
+				{
+					"name": "count",
+					"type": "number",
+					"description": "Number of results to return (1-10)",
+					"default": 5
+				},
+				{
+					"name": "country",
+					"type": "string",
+					"description": "Country code for localized results",
+					"default": "US"
+				}
+			],
+			"output": {
+				"type": "object",
+				"description": "Search results with prioritized information"
+			}
+		}
+	]
+}

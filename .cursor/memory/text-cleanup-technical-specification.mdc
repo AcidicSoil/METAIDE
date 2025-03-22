@@ -1,0 +1,382 @@
+---
+description: Technical specification for the text-cleanup.js tool
+globs: text-cleanup.js
+alwaysApply: false
+---
+# Technical Specification: Text Cleanup Tool
+
+## 1. Overview
+
+The Text Cleanup Tool is a Node.js utility designed to find and replace text patterns in codebases with context-aware intelligence. It analyzes the surrounding context of each match to determine the most appropriate replacement format, ensuring consistency across the project.
+
+## 2. System Architecture
+
+```mermaid
+graph TD
+    A[CLI Interface] --> B[File Discovery]
+    B --> C[File Processing]
+    C --> D[Context Analysis]
+    D --> E[Pattern Replacement]
+    E --> F[File Update]
+    C --> G[Report Generation]
+    
+    subgraph "Core Modules"
+        B
+        C
+        D
+        E
+        F
+        G
+    end
+```
+
+### 2.1 Module Descriptions
+
+| Module | Purpose | Key Functions |
+|--------|---------|---------------|
+| CLI Interface | Process command-line arguments | Parse options, Validate inputs |
+| File Discovery | Find files matching patterns | Pattern matching, Directory traversal |
+| File Processing | Read and process file contents | File I/O, Batch processing |
+| Context Analysis | Analyze text surrounding matches | Context detection, Pattern recognition |
+| Pattern Replacement | Replace text based on context | Smart replacement, String manipulation |
+| File Update | Write changes to files | File I/O, Backup management |
+| Report Generation | Generate reports of changes | Markdown formatting, Summary statistics |
+
+## 3. Dependencies
+
+| Dependency | Version | Purpose |
+|------------|---------|---------|
+| commander | ^8.0.0 | Command-line argument parsing |
+| glob | ^8.0.3 | File pattern matching |
+| chalk | ^4.1.2 | Colored console output |
+| fs (Node.js) | Built-in | File system operations |
+| path (Node.js) | Built-in | Path manipulation |
+
+## 4. Functional Requirements
+
+### 4.1 Core Functionality
+
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| FR-1 | Find text patterns in files using regex | High |
+| FR-2 | Replace patterns with context-aware text | High |
+| FR-3 | Process multiple files in batch | High |
+| FR-4 | Generate detailed reports of changes | Medium |
+| FR-5 | Support dry-run mode for preview | Medium |
+| FR-6 | Include/exclude specific files and directories | Medium |
+| FR-7 | Analyze surrounding context for appropriate replacement | High |
+
+### 4.2 Context Detection Requirements
+
+| ID | Context Type | Detection Method | Priority |
+|----|--------------|------------------|----------|
+| CD-1 | Code context | Identify code keywords, syntax patterns | High |
+| CD-2 | Documentation context | Identify markdown, headings, comments | High |
+| CD-3 | Shell script context | Identify commands, script patterns | Medium |
+| CD-4 | Package.json context | Identify JSON structure, dependencies | Medium |
+| CD-5 | File path context | Identify import/require statements | Medium |
+| CD-6 | Capitalization context | Analyze surrounding capitalization | Low |
+
+### 4.3 Performance Requirements
+
+| ID | Requirement | Target |
+|----|-------------|--------|
+| PR-1 | Process large files efficiently | Files up to 10MB |
+| PR-2 | Handle large numbers of files | Up to 1000 files |
+| PR-3 | Memory usage during processing | <500MB peak |
+| PR-4 | Processing speed | >50 files/second |
+
+## 5. Technical Implementation
+
+### 5.1 Data Structures
+
+#### 5.1.1 File Processing Data
+
+```javascript
+{
+  filePathsToProcess: string[],
+  filesProcessed: number,
+  totalMatches: number,
+  totalReplacements: number,
+  startTime: Date,
+  endTime: Date,
+  replacements: {
+    [filePath: string]: {
+      original: string,
+      replacement: string,
+      context: string,
+      line: number
+    }[]
+  }
+}
+```
+
+#### 5.1.2 Configuration Options
+
+```javascript
+{
+  pattern: string | RegExp,
+  replacement?: string,
+  directory: string,
+  include: string,
+  exclude: string[],
+  contextLines: number,
+  dryRun: boolean,
+  smart: boolean,
+  report: string
+}
+```
+
+### 5.2 Algorithms
+
+#### 5.2.1 Context Analysis Algorithm
+
+```javascript
+function analyzeContext(match, context) {
+  // 1. Convert context to lowercase for case-insensitive checks
+  const lowerContext = context.toLowerCase();
+  
+  // 2. Identify contextual clues
+  const hasCodeContext = containsCodeIndicators(lowerContext);
+  const hasDocContext = containsDocumentationIndicators(lowerContext);
+  const hasShellContext = containsShellIndicators(lowerContext);
+  const hasPackageContext = containsPackageIndicators(lowerContext);
+  const hasFilePathContext = containsFilePathIndicators(lowerContext);
+  
+  // 3. Determine replacement based on context priority
+  if (hasCodeContext) {
+    return generateCodeStyleReplacement(match);
+  } else if (hasDocContext) {
+    return generateDocumentationStyleReplacement(match);
+  } else if (hasShellContext) {
+    return generateShellStyleReplacement(match);
+  } else if (hasPackageContext) {
+    return generatePackageStyleReplacement(match);
+  } else if (hasFilePathContext) {
+    return generateFilePathStyleReplacement(match);
+  }
+  
+  // 4. Default replacement if no specific context detected
+  return generateDefaultReplacement(match);
+}
+```
+
+#### 5.2.2 File Processing Algorithm
+
+```javascript
+async function processFiles(patterns, options) {
+  // 1. Find files matching the include pattern
+  const filePaths = await findFiles(options.directory, options.include, options.exclude);
+  
+  // 2. Initialize results data structure
+  const results = initializeResults();
+  
+  // 3. Process each file sequentially
+  for (const filePath of filePaths) {
+    try {
+      const fileResults = await processFile(
+        filePath, 
+        options.pattern, 
+        options.dryRun, 
+        options.smart, 
+        options.contextLines
+      );
+      
+      // 4. Update global results
+      updateResults(results, fileResults);
+    } catch (error) {
+      handleError(error, filePath);
+    }
+  }
+  
+  // 5. Generate report
+  if (options.report) {
+    await generateReport(results, options);
+  }
+  
+  // 6. Return summary
+  return summarizeResults(results);
+}
+```
+
+### 5.3 API
+
+#### 5.3.1 Command-Line Interface
+
+```
+text-cleanup [options]
+
+Options:
+  -p, --pattern <pattern>         Text pattern to search for (regex supported)
+  -r, --replacement <replacement> Text to replace matches with
+  -d, --directory <directory>     Root directory to search in (default: ".")
+  -i, --include <glob>            Glob pattern for files to include
+  -e, --exclude <dirs>            Directories to exclude
+  -c, --context-lines <number>    Number of context lines to analyze (default: 3)
+  --dry-run                       Show what would be changed without making changes
+  --smart                         Use smart replacement based on context
+  --report <file>                 Output report file
+  -h, --help                      Display help for command
+```
+
+#### 5.3.2 Programmatic API
+
+```javascript
+/**
+ * Process files to find and replace text patterns
+ * @param {Object} options - Configuration options
+ * @returns {Promise<Object>} - Results summary
+ */
+async function textCleanup(options) {
+  // Implementation
+}
+
+// Example usage
+const results = await textCleanup({
+  pattern: 'ollama-tag-cli',
+  directory: './src',
+  smart: true,
+  dryRun: true,
+  report: './report.md'
+});
+```
+
+## 6. File Formats
+
+### 6.1 Report Format
+
+```markdown
+# Text Cleanup Report
+
+Generated: [TIMESTAMP]
+
+## Summary
+
+- **Search Pattern:** `[PATTERN]`
+- **Replacement:** [REPLACEMENT]
+- **Files Scanned:** [FILES_SCANNED]
+- **Total Matches:** [TOTAL_MATCHES]
+- **Total Replacements:** [TOTAL_REPLACEMENTS]
+- **Mode:** [DRY_RUN/ACTUAL]
+- **Smart Replacement:** [YES/NO]
+
+## Replacements
+
+### [FILE_PATH]
+
+| Original | Replacement | Context |
+|----------|-------------|---------|
+| `[ORIGINAL]` | `[REPLACEMENT]` | [CONTEXT] |
+```
+
+## 7. Security & Privacy
+
+### 7.1 File System Access
+
+- Read/write access to specified directories
+- No network access required
+- No data sent outside the local environment
+
+### 7.2 Security Considerations
+
+| ID | Security Consideration | Mitigation |
+|----|------------------------|------------|
+| SC-1 | Unintended file modifications | Dry-run mode, explicit confirmation |
+| SC-2 | Access to sensitive files | Exclude patterns, directory restrictions |
+| SC-3 | Regex DoS | Input validation, timeout mechanisms |
+| SC-4 | File path manipulation | Path normalization, validation |
+
+## 8. Error Handling
+
+### 8.1 Error Categories
+
+| Error Type | Handling Strategy |
+|------------|-------------------|
+| File not found | Log error, continue with next file |
+| Permission denied | Log error, continue with next file |
+| Invalid regex | Throw error with helpful message |
+| Read/write errors | Log error, attempt retry, then skip |
+| Memory limitations | Batch processing, streaming for large files |
+
+### 8.2 Error Messages
+
+| Error Code | Message Template | Resolution Hint |
+|------------|------------------|-----------------|
+| E001 | Invalid regex pattern: ${details} | Check pattern syntax |
+| E002 | File not found: ${filePath} | Verify file path exists |
+| E003 | Permission denied: ${filePath} | Check file permissions |
+| E004 | Error reading file: ${filePath} - ${details} | Verify file is not locked |
+| E005 | Error writing file: ${filePath} - ${details} | Check write permissions |
+
+## 9. Performance Optimization
+
+### 9.1 Strategies
+
+1. **Batch Processing**: Process files in batches to manage memory usage
+2. **Regex Optimization**: Compile regex patterns once and reuse
+3. **Early Exit**: Skip files without matching patterns quickly
+4. **Concurrent Processing**: Optional parallel processing for large codebases
+5. **Stream Processing**: Use streams for very large files
+
+### 9.2 Benchmarks
+
+| Scenario | Expected Performance |
+|----------|----------------------|
+| Small codebase (<100 files) | <1 second |
+| Medium codebase (100-1000 files) | 1-5 seconds |
+| Large codebase (>1000 files) | 5-30 seconds |
+| Single large file (>10MB) | <3 seconds |
+
+## 10. Future Extensions
+
+### 10.1 Planned Enhancements
+
+| ID | Enhancement | Priority |
+|----|-------------|----------|
+| FE-1 | Multi-threading support for large codebases | Medium |
+| FE-2 | Interactive mode with confirmation per file | Low |
+| FE-3 | VCS integration (Git awareness) | Low |
+| FE-4 | Plugin system for custom context detection | Medium |
+| FE-5 | Visual diff UI for changes | Low |
+| FE-6 | Machine learning for context detection | Low |
+
+### 10.2 Extension Points
+
+1. **Context Detection**: Pluggable context detection modules
+2. **Report Formats**: Alternative report format generators
+3. **File Processing**: Custom file processors for special file types
+4. **Replacement Logic**: Custom replacement strategy implementations
+
+## 11. Development Standards
+
+### 11.1 Coding Standards
+
+- ES6+ JavaScript
+- JSDoc for all functions
+- Error handling for all I/O operations
+- Comprehensive logging
+
+### 11.2 Testing Requirements
+
+- Unit tests for all core functions
+- Integration tests for file processing
+- Coverage targets: >85% statements, >90% branches
+- Performance tests for large files/codebases
+
+## 12. Deployment
+
+### 12.1 Installation
+
+```bash
+# As CLI tool
+npm install -g text-cleanup
+
+# As project dependency
+npm install --save-dev text-cleanup
+```
+
+### 12.2 Compatibility
+
+- Node.js 16.x, 18.x, 20.x
+- Operating Systems: Windows, macOS, Linux
+- Dependencies: commander, glob, chalk 

@@ -1,0 +1,294 @@
+---
+description: Comprehensive testing strategy for text-cleanup.js tool
+globs: test/text-cleanup.test.js,.github/workflows/text-cleanup.yml
+alwaysApply: false
+---
+# Text Cleanup Tool: Testing Strategy
+
+This document outlines the comprehensive testing strategy for the text-cleanup.js tool, ensuring reliability, maintainability, and correctness across various use cases.
+
+## Testing Objectives
+
+1. **Functionality Verification**: Ensure all features work as expected
+2. **Edge Case Handling**: Verify behavior with unusual inputs and scenarios
+3. **Regression Prevention**: Prevent previously fixed bugs from returning
+4. **Integration Validation**: Confirm proper interaction with other components
+5. **Performance Assessment**: Evaluate efficiency with various file sizes and quantities
+6. **Usability Confirmation**: Ensure clear output and error messages
+
+## Testing Levels
+
+### 1. Unit Testing
+
+- **Purpose**: Verify individual functions and components
+- **Tool**: Mocha with Node.js assert library
+- **Location**: `test/text-cleanup.test.js`
+
+**Key Unit Tests:**
+
+| Function/Component | Test Cases |
+|-------------------|------------|
+| `createSearchRegex()` | Valid regex patterns, Already-regex inputs, Invalid patterns |
+| `findFiles()` | Various glob patterns, Different exclude dirs, Non-existent paths |
+| `getContext()` | Start of file, End of file, Multi-line content |
+| `analyzeContext()` | All context types (code, docs, CLI, etc.), Edge cases |
+| `processFile()` | Various file types, With/without matches, Error cases |
+| `generateReport()` | Different report formats, Various match quantities |
+
+**Example Test Structure:**
+
+```javascript
+describe('analyzeContext()', () => {
+  it('should detect code context correctly', () => {
+    // Test cases for code context
+  });
+  
+  it('should detect documentation context correctly', () => {
+    // Test cases for documentation context
+  });
+  
+  // Additional test cases...
+});
+```
+
+### 2. Integration Testing
+
+- **Purpose**: Verify components work together correctly
+- **Tool**: Mocha with file system operations
+- **Location**: Integration test sections in `test/text-cleanup.test.js`
+
+**Key Integration Tests:**
+
+| Integration Scenario | Test Cases |
+|----------------------|------------|
+| File Discovery + Processing | Various directory structures, Mixed file types |
+| Context Analysis + Replacement | Different context types across multiple files |
+| Report Generation + File System | Report saving, Structure verification |
+| CLI Arguments + Execution | Various command-line option combinations |
+
+**Example Test Structure:**
+
+```javascript
+describe('End-to-end file processing', () => {
+  it('should process multiple files with mixed contexts', () => {
+    // Set up test files
+    // Run text-cleanup with options
+    // Verify correct replacements in all files
+  });
+  
+  // Additional test cases...
+});
+```
+
+### 3. System Testing
+
+- **Purpose**: Verify the tool works correctly in the target environment
+- **Tool**: GitHub Actions CI/CD workflow
+- **Location**: `.github/workflows/text-cleanup.yml`
+
+**Key System Tests:**
+
+| System Scenario | Test Cases |
+|-----------------|------------|
+| Cross-Platform Compatibility | Test on Ubuntu, Windows, macOS |
+| Node.js Version Compatibility | Test on Node.js 16.x, 18.x, 20.x |
+| Performance with Large Codebases | Test with many files, large files |
+| Integration with GitHub Actions | Report artifact generation, Warning thresholds |
+
+**Example Workflow Configuration:**
+
+```yaml
+strategy:
+  matrix:
+    node-version: [16.x, 18.x, 20.x]
+    os: [ubuntu-latest, windows-latest, macos-latest]
+
+steps:
+  - uses: actions/checkout@v3
+  - name: Use Node.js ${{ matrix.node-version }}
+    uses: actions/setup-node@v3
+    with:
+      node-version: ${{ matrix.node-version }}
+```
+
+## Test Data Strategy
+
+### 1. Static Test Files
+
+- **Purpose**: Consistent, predictable test inputs
+- **Location**: `test/fixtures/`
+- **Types**:
+  - Simple single-pattern files
+  - Complex multi-pattern files
+  - Edge case files
+  - Different file types (JS, TS, MD, etc.)
+
+### 2. Generated Test Files
+
+- **Purpose**: Test a wide range of scenarios programmatically
+- **Method**: Create test files during test execution
+- **Approach**: Parametrized test generation
+
+```javascript
+function createTestFile(filename, content) {
+  const filePath = path.join(testDir, filename);
+  fs.writeFileSync(filePath, content, 'utf8');
+  return filePath;
+}
+
+// Create different test cases programmatically
+for (const context of contexts) {
+  it(`should handle ${context.name} correctly`, () => {
+    const testFile = createTestFile(`${context.name}.js`, context.content);
+    // Test with this file
+  });
+}
+```
+
+### 3. Real-World Sample Data
+
+- **Purpose**: Validate against real-world usage patterns
+- **Method**: Anonymized samples from actual codebase
+- **Approach**: Include representative examples of different contexts
+
+## Test Coverage Strategy
+
+### 1. Code Coverage
+
+- **Target**: >85% line coverage, >90% branch coverage
+- **Tool**: nyc (Istanbul) with lcov reporting
+- **CI Integration**: Report coverage in GitHub Actions
+
+```yaml
+- name: Generate test coverage report
+  run: |
+    npm install -g nyc
+    nyc --reporter=text --reporter=lcov mocha test/text-cleanup.test.js
+```
+
+### 2. Feature Coverage
+
+- **Approach**: Test matrix mapping features to test cases
+- **Validation**: Checklist of features and their test coverage
+- **Tracking**: Documentation of covered vs. uncovered features
+
+### 3. Context Coverage
+
+- **Approach**: Ensure all context patterns are tested
+- **Validation**: Matrix of context patterns and their test cases
+- **Assessment**: Regular review of new context patterns
+
+## Testing Frameworks & Tools
+
+| Tool | Purpose |
+|------|---------|
+| Mocha | Test runner for JavaScript |
+| Node.js assert | Assertion library |
+| nyc (Istanbul) | Code coverage |
+| GitHub Actions | CI/CD testing |
+| lcov | Coverage reporting |
+
+## Testing Workflow
+
+### 1. Local Development Testing
+
+```mermaid
+graph TD
+    A[Write Code] --> B[Write Unit Tests]
+    B --> C[Run Unit Tests Locally]
+    C -->|Tests Pass| D[Commit Code]
+    C -->|Tests Fail| A
+    D --> E[Push to GitHub]
+    E --> F[GitHub Actions Run Tests]
+    F -->|Tests Pass| G[Merge Changes]
+    F -->|Tests Fail| A
+```
+
+### 2. CI/CD Testing
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant GH as GitHub
+    participant CI as CI/CD
+    participant Cov as Coverage Report
+    
+    Dev->>GH: Push Changes
+    GH->>CI: Trigger Workflow
+    CI->>CI: Run Unit Tests
+    CI->>CI: Run Integration Tests
+    CI->>Cov: Generate Coverage Report
+    CI->>CI: Analyze Codebase
+    CI->>GH: Report Results
+    GH->>Dev: Notify Status
+```
+
+## Test Maintenance Strategy
+
+### 1. Regular Review
+
+- **Frequency**: Monthly review of test coverage
+- **Process**: Identify gaps in coverage
+- **Action**: Add tests for uncovered features/scenarios
+
+### 2. Refactoring Support
+
+- **Approach**: Tests as documentation and safety net
+- **Process**: Update tests alongside code changes
+- **Validation**: Maintain coverage during refactoring
+
+### 3. New Feature Testing
+
+- **Process**: Write tests before implementing new features
+- **Validation**: No new feature without tests
+- **Coverage**: Ensure >85% coverage for new code
+
+## Issues & Debugging
+
+### 1. Test Failure Analysis
+
+- **Process**: Systematic analysis of test failures
+- **Documentation**: Record failures and resolutions
+- **Prevention**: Add regression tests for fixed issues
+
+### 2. Flaky Test Handling
+
+- **Detection**: Monitor for inconsistent test results
+- **Resolution**: Refactor tests to be deterministic
+- **Isolation**: Quarantine flaky tests until fixed
+
+## Performance Testing
+
+### 1. Large File Testing
+
+- **Approach**: Test with progressively larger files
+- **Metrics**: Time to process, memory usage
+- **Thresholds**: Define acceptable performance limits
+
+### 2. Batch Processing Testing
+
+- **Approach**: Test with increasing numbers of files
+- **Metrics**: Files per second, total processing time
+- **Optimization**: Identify bottlenecks for improvement
+
+## Security Testing
+
+### 1. Input Validation
+
+- **Approach**: Test with malformed or malicious inputs
+- **Validation**: Ensure proper error handling
+- **Prevention**: Check for potential security issues
+
+### 2. File System Safety
+
+- **Approach**: Test file system operations for safety
+- **Validation**: Ensure no unintended modifications
+- **Safeguards**: Verify dry-run mode effectiveness
+
+## Future Test Improvements
+
+1. **Property-Based Testing**: Implement generative tests for a wider range of inputs
+2. **Snapshot Testing**: Add snapshot tests for report generation
+3. **Benchmark Suite**: Create dedicated performance benchmarks
+4. **Visual Regression**: Add visual comparison of reports
+5. **Mutation Testing**: Ensure test quality through mutation testing 

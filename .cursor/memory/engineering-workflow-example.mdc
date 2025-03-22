@@ -1,0 +1,110 @@
+---
+description: Example of proper engineering workflow in text-cleanup.js tool development
+globs: text-cleanup.js,test/text-cleanup.test.js,.github/workflows/text-cleanup.yml
+alwaysApply: false
+---
+# 🔧 Engineering Workflow Example: Text Cleanup Tool
+
+This document records the development of the text-cleanup.js tool as an exemplary engineering workflow that follows proper development practices in the Ollama Ecosystem.
+
+## Initial Problem Statement
+
+**Need**: A tool to maintain consistent naming across the codebase, particularly when migrating from `ollama-tag-cli` to `t2p`.
+
+**Requirements**:
+- Context-aware text replacement
+- Support for different file types
+- Smart detection of code vs. documentation contexts
+- Batch processing capabilities
+- Report generation
+- Dry-run preview mode
+
+## Engineering Workflow Steps
+
+### 1. Initial Implementation
+
+- Created core functionality with commander.js for CLI interface
+- Implemented file discovery with glob patterns
+- Added context analysis for pattern matching
+- Established report generation in Markdown
+
+### 2. Enhanced Context Detection
+
+- Added sophisticated context detection patterns:
+  - Code contexts (functions, imports, classes, etc.)
+  - Documentation contexts (markdown, comments, etc.)
+  - Shell script contexts (npm, bash, etc.)
+  - Package.json contexts (dependencies, scripts)
+  - File path contexts (imports, requires)
+  - Capitalization contexts (sentence beginnings, all-caps)
+
+### 3. Test-Driven Development
+
+- Created comprehensive test suite with Mocha
+- Implemented test cases for different file types and contexts
+- Added setup/teardown procedures for test environment
+- Created assertion tests for core functionality
+- Ensured coverage of edge cases
+
+### 4. CI/CD Integration
+
+- Created GitHub Actions workflow
+- Configured multi-version Node.js testing
+- Added reporting and artifact generation
+- Implemented warning system for excessive inconsistencies
+- Added code coverage reporting
+
+### 5. Documentation
+
+- Created comprehensive markdown documentation
+- Added examples for common use cases
+- Documented context detection patterns
+- Created integration guide for migration
+
+## Engineering Best Practices Demonstrated
+
+1. **Modular Design**: Separate functions for specific responsibilities
+2. **Error Handling**: Comprehensive try/catch and error reporting
+3. **Configuration Management**: CLI options with sensible defaults
+4. **Testing**: Comprehensive test suite with various scenarios
+5. **Documentation**: Complete user and developer documentation
+6. **Progressive Enhancement**: Started with core functionality, then expanded
+7. **CI/CD Integration**: Automated testing and reporting
+8. **DRY Principle**: Reusable functions for common operations
+9. **Context Awareness**: Smart decisions based on surrounding code
+
+## Code Quality Principles
+
+1. **Readable Code**: Clear variable names and comments
+2. **Maintainable Structure**: Logical function organization
+3. **Performance Considerations**: Optimized file processing
+4. **Error Recovery**: Graceful handling of errors
+5. **Input Validation**: Check for required parameters and valid inputs
+
+## Workflow Impact
+
+The development of the text-cleanup.js tool demonstrates proper engineering workflows by:
+
+1. **Solving a Real Need**: Addressing the naming consistency challenge
+2. **Progressive Implementation**: Starting with core functionality and expanding
+3. **Comprehensive Testing**: Ensuring reliability across use cases
+4. **Integration with Ecosystem**: Working with existing tools and workflows
+5. **Documentation-Driven**: Complete documentation for users and developers
+
+## Key Files
+
+- `text-cleanup.js`: Main implementation with context analysis
+- `test/text-cleanup.test.js`: Comprehensive test suite
+- `.github/workflows/text-cleanup.yml`: CI/CD configuration
+- `docs/text-cleanup.md`: User documentation
+- `t2p/docs/text-cleanup-integration.md`: Integration documentation
+
+## Lessons Learned
+
+1. Context-aware text replacement requires sophisticated pattern detection
+2. Test-driven development ensures functionality across various scenarios
+3. Command-line tools benefit from comprehensive option handling
+4. Report generation enhances visibility and confidence in tool operation
+5. Integration with existing workflows enhances adoption and utility
+
+This example serves as a reference for future engineering tasks, demonstrating the proper application of the Engineering Mode principles in the Development Mode Framework. 

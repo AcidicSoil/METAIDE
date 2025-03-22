@@ -1,0 +1,176 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Memory System Health Monitor
+
+## Health Metrics
+
+### System Performance
+```typescript
+interface SystemHealthMetrics {
+  memoryUsage: {
+    current: number;
+    peak: number;
+    threshold: number;
+  };
+  responseTime: {
+    average: number;
+    p95: number;
+    p99: number;
+  };
+  updateFrequency: {
+    daily: number;
+    weekly: number;
+    monthly: number;
+  };
+  errorRate: {
+    current: number;
+    threshold: number;
+    trend: 'increasing' | 'stable' | 'decreasing';
+  };
+}
+```
+
+### Component Health
+```typescript
+interface ComponentHealth {
+  status: 'healthy' | 'degraded' | 'critical';
+  lastCheck: string;
+  metrics: {
+    uptime: number;
+    errorCount: number;
+    warningCount: number;
+  };
+  dependencies: {
+    status: 'ok' | 'warning' | 'error';
+    details: string[];
+  };
+}
+```
+
+### Memory Integrity
+```typescript
+interface MemoryIntegrity {
+  consistency: {
+    graphConsistency: boolean;
+    relationshipValidity: boolean;
+    dataIntegrity: boolean;
+  };
+  completeness: {
+    requiredFields: number;
+    missingFields: number;
+    coverage: number;
+  };
+  freshness: {
+    lastUpdate: string;
+    updateFrequency: number;
+    staleness: number;
+  };
+}
+```
+
+## Health Checks
+
+### Automated Checks
+```typescript
+interface HealthChecks {
+  daily: [
+    'validateGraphConsistency',
+    'checkMemoryIntegrity',
+    'verifyRelationships',
+    'updateMetrics'
+  ];
+  weekly: [
+    'deepConsistencyCheck',
+    'performanceAnalysis',
+    'dependencyAudit',
+    'cleanupOrphanedData'
+  ];
+  monthly: [
+    'fullSystemAudit',
+    'optimizationAnalysis',
+    'capacityPlanning',
+    'backupVerification'
+  ];
+}
+```
+
+### Alert System
+```typescript
+interface AlertSystem {
+  thresholds: {
+    memoryUsage: 80;  // percentage
+    errorRate: 5;     // percentage
+    responseTime: 1000; // milliseconds
+    staleness: 7;     // days
+  };
+  notifications: {
+    channels: ['console', 'log', 'alert'];
+    severity: ['info', 'warning', 'error', 'critical'];
+    frequency: 'realtime' | 'daily' | 'weekly';
+  };
+  actions: {
+    onWarning: ['notify', 'log', 'analyze'];
+    onError: ['notify', 'log', 'analyze', 'backup'];
+    onCritical: ['notify', 'log', 'analyze', 'backup', 'recover'];
+  };
+}
+```
+
+## Recovery Procedures
+
+### Backup Strategy
+```typescript
+interface BackupStrategy {
+  frequency: {
+    incremental: 'daily';
+    full: 'weekly';
+    verification: 'monthly';
+  };
+  retention: {
+    incremental: '7d';
+    full: '30d';
+    verified: '90d';
+  };
+  locations: [
+    'local',
+    'remote',
+    'archive'
+  ];
+}
+```
+
+### Recovery Process
+```typescript
+interface RecoveryProcess {
+  steps: [
+    'validateBackup',
+    'stopServices',
+    'restoreData',
+    'verifyIntegrity',
+    'startServices',
+    'verifyHealth'
+  ];
+  rollback: {
+    enabled: true;
+    trigger: 'healthCheckFailed';
+    steps: [
+      'stopServices',
+      'restorePrevious',
+      'verifyIntegrity',
+      'startServices'
+    ];
+  };
+}
+```
+
+## Version History
+- v1.0.0 - Initial health monitoring system
+- Current: v1.0.0
+
+## Last Update
+- Timestamp: ${new Date().toISOString()}
+- Type: System Enhancement
+- Changes: Added comprehensive health monitoring system 

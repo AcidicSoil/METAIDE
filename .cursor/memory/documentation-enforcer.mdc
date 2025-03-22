@@ -1,0 +1,265 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Documentation Enforcer System
+
+## Core Components
+
+### Document Validator
+```typescript
+interface DocumentValidator {
+  rules: {
+    structure: {
+      requiredSections: string[];
+      sectionOrder: string[];
+      minSectionLength: number;
+    };
+    content: {
+      requiredElements: string[];
+      prohibitedElements: string[];
+      formattingRules: {
+        headers: 'markdown' | 'html';
+        codeBlocks: 'fenced' | 'indented';
+        lists: 'consistent' | 'flexible';
+      };
+    };
+    metadata: {
+      required: string[];
+      format: {
+        version: 'semantic' | 'simple';
+        date: 'iso' | 'relative';
+        tags: 'required' | 'optional';
+      };
+    };
+  };
+  validation: {
+    strict: boolean;
+    autoFix: boolean;
+    reportFormat: 'json' | 'markdown' | 'html';
+  };
+}
+```
+
+### Validation Rules
+
+#### Markdown Documents
+```typescript
+interface MarkdownRules {
+  structure: {
+    required: [
+      'Title',
+      'Description',
+      'Table of Contents',
+      'Main Content',
+      'Version History',
+      'Last Update'
+    ];
+    optional: [
+      'Prerequisites',
+      'Installation',
+      'Usage Examples',
+      'API Reference',
+      'Contributing',
+      'License'
+    ];
+  };
+  formatting: {
+    headers: {
+      maxLevel: 3;
+      format: '# ';
+      spacing: 'single';
+    };
+    codeBlocks: {
+      language: 'required';
+      fencing: '```';
+      indentation: 4;
+    };
+    lists: {
+      type: 'consistent';
+      indentation: 2;
+    };
+  };
+  content: {
+    maxLineLength: 100;
+    minSectionLength: 50;
+    requiredMetadata: [
+      'version',
+      'lastUpdate',
+      'author',
+      'status'
+    ];
+  };
+}
+```
+
+#### Technical Documentation
+```typescript
+interface TechnicalDocRules {
+  structure: {
+    required: [
+      'Overview',
+      'Architecture',
+      'Components',
+      'Interfaces',
+      'Implementation',
+      'Testing',
+      'Deployment'
+    ];
+    optional: [
+      'Performance',
+      'Security',
+      'Monitoring',
+      'Troubleshooting'
+    ];
+  };
+  codeExamples: {
+    required: boolean;
+    format: 'typescript' | 'javascript';
+    testing: 'required' | 'optional';
+  };
+  diagrams: {
+    required: boolean;
+    format: 'mermaid' | 'plantuml';
+    minCount: 1;
+  };
+}
+```
+
+### Validation Process
+
+#### Pre-validation
+```typescript
+interface PreValidation {
+  checks: [
+    'fileExists',
+    'fileType',
+    'fileSize',
+    'encoding',
+    'lineEndings'
+  ];
+  cleanup: [
+    'removeTrailingWhitespace',
+    'normalizeLineEndings',
+    'fixIndentation'
+  ];
+}
+```
+
+#### Main Validation
+```typescript
+interface MainValidation {
+  structure: {
+    checkSections: boolean;
+    validateOrder: boolean;
+    checkLengths: boolean;
+  };
+  content: {
+    checkFormatting: boolean;
+    validateLinks: boolean;
+    checkCodeBlocks: boolean;
+  };
+  metadata: {
+    validateVersion: boolean;
+    checkDates: boolean;
+    validateTags: boolean;
+  };
+}
+```
+
+#### Post-validation
+```typescript
+interface PostValidation {
+  reporting: {
+    generateReport: boolean;
+    format: 'json' | 'markdown' | 'html';
+    includeStats: boolean;
+  };
+  fixes: {
+    autoFix: boolean;
+    backupOriginal: boolean;
+    createPatch: boolean;
+  };
+}
+```
+
+### Validation Report
+
+#### Report Structure
+```typescript
+interface ValidationReport {
+  document: {
+    name: string;
+    type: string;
+    size: number;
+    lastModified: string;
+  };
+  validation: {
+    status: 'pass' | 'fail' | 'partial';
+    score: number;
+    timestamp: string;
+  };
+  issues: {
+    critical: Issue[];
+    warnings: Issue[];
+    suggestions: Issue[];
+  };
+  metrics: {
+    sections: number;
+    codeBlocks: number;
+    diagrams: number;
+    links: number;
+  };
+  fixes: {
+    applied: Fix[];
+    suggested: Fix[];
+    failed: Fix[];
+  };
+}
+```
+
+### Usage Examples
+
+#### Basic Validation
+```typescript
+// Example usage
+const validator = new DocumentValidator({
+  rules: markdownRules,
+  validation: {
+    strict: true,
+    autoFix: true,
+    reportFormat: 'markdown'
+  }
+});
+
+const result = await validator.validate('path/to/document.md');
+console.log(result.report);
+```
+
+#### Custom Rules
+```typescript
+// Custom rule example
+const customRules = {
+  ...markdownRules,
+  content: {
+    ...markdownRules.content,
+    customChecks: [
+      {
+        name: 'checkVersionFormat',
+        pattern: /^v\d+\.\d+\.\d+$/,
+        message: 'Version must follow semantic versioning'
+      }
+    ]
+  }
+};
+```
+
+## Version History
+- v1.0.0 - Initial documentation enforcer system
+- Current: v1.0.0
+
+## Last Update
+- Timestamp: ${new Date().toISOString()}
+- Type: System Enhancement
+- Changes: Created comprehensive documentation validation system 

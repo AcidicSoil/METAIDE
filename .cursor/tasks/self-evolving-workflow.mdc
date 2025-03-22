@@ -1,0 +1,233 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Self-Evolving Workflow Optimization System
+
+## Overview
+A system that continuously learns from user workflows and evolves to provide optimized patterns and automation opportunities.
+
+## Core Architecture
+
+### 1. Workflow Pattern Recognition Engine
+```typescript
+interface WorkflowPattern {
+  id: string;
+  actions: Action[];
+  frequency: number;
+  context: WorkflowContext;
+  efficiency: EfficiencyMetrics;
+  optimizationPotential: number;
+}
+
+class PatternRecognitionEngine {
+  async detectPatterns(userActions: Action[]): Promise<WorkflowPattern[]>;
+  async analyzeEfficiency(pattern: WorkflowPattern): Promise<EfficiencyMetrics>;
+  async suggestOptimizations(pattern: WorkflowPattern): Promise<OptimizationSuggestion[]>;
+}
+```
+
+### 2. Self-Evolution Framework
+```typescript
+interface EvolutionStrategy {
+  learnFromInteractions(interactions: UserInteraction[]): Promise<LearningResult>;
+  adaptWorkflows(patterns: WorkflowPattern[]): Promise<AdaptationResult>;
+  optimizePerformance(metrics: PerformanceMetrics): Promise<OptimizationResult>;
+}
+
+class SelfEvolvingSystem {
+  private patternEngine: PatternRecognitionEngine;
+  private learningSystem: MachineLearningSystem;
+  private adaptationEngine: WorkflowAdaptationEngine;
+
+  async evolve(data: EvolutionData): Promise<EvolutionResult> {
+    const patterns = await this.patternEngine.detectPatterns(data.actions);
+    const learningResult = await this.learningSystem.learn(patterns);
+    return this.adaptationEngine.adapt(learningResult);
+  }
+}
+```
+
+### 3. Activity Monitoring System
+```typescript
+interface ActivityMonitor {
+  trackUserActions(action: UserAction): void;
+  analyzeWorkflowEfficiency(): EfficiencyMetrics;
+  detectBottlenecks(): BottleneckReport;
+  suggestImprovements(): ImprovementSuggestions;
+}
+```
+
+## Implementation Phases
+
+### Phase 1: Foundation (Week 1-2)
+- [ ] Set up activity monitoring infrastructure
+- [ ] Implement basic pattern recognition
+- [ ] Create initial learning algorithms
+- [ ] Design workflow storage system
+
+### Phase 2: Learning System (Week 3-4)
+- [ ] Implement machine learning models
+- [ ] Create pattern classification system
+- [ ] Build efficiency analysis tools
+- [ ] Develop optimization suggestions
+
+### Phase 3: Adaptation Engine (Week 5-6)
+- [ ] Build workflow adaptation system
+- [ ] Implement automated optimization
+- [ ] Create feedback collection system
+- [ ] Develop performance metrics
+
+### Phase 4: Integration (Week 7-8)
+- [ ] Connect with existing tools
+- [ ] Implement user feedback system
+- [ ] Create visualization dashboard
+- [ ] Set up monitoring and alerts
+
+## Key Components
+
+### 1. Pattern Recognition
+```typescript
+interface PatternDetector {
+  minimumFrequency: number;
+  patternLength: Range;
+  contextAwareness: ContextSettings;
+  
+  detectPatterns(actions: Action[]): Pattern[];
+  validatePattern(pattern: Pattern): ValidationResult;
+  rankPatterns(patterns: Pattern[]): RankedPatterns;
+}
+```
+
+### 2. Learning System
+```typescript
+interface LearningSystem {
+  modelType: ModelType;
+  learningRate: number;
+  optimizationGoals: OptimizationGoal[];
+  
+  train(data: TrainingData): Promise<TrainingResult>;
+  predict(input: PredictionInput): Promise<PredictionResult>;
+  adapt(feedback: Feedback): Promise<AdaptationResult>;
+}
+```
+
+### 3. Optimization Engine
+```typescript
+interface OptimizationEngine {
+  strategies: OptimizationStrategy[];
+  constraints: OptimizationConstraint[];
+  metrics: PerformanceMetric[];
+  
+  optimizeWorkflow(workflow: Workflow): OptimizedWorkflow;
+  validateOptimization(optimization: Optimization): ValidationResult;
+  applyOptimization(optimization: Optimization): ApplicationResult;
+}
+```
+
+## Integration Points
+
+### 1. IDE Integration
+```typescript
+interface IDEIntegration {
+  trackEditorActions(): void;
+  monitorFileOperations(): void;
+  captureUserCommands(): void;
+  suggestOptimizations(): void;
+}
+```
+
+### 2. Knowledge Graph Integration
+```typescript
+interface KnowledgeGraphIntegration {
+  storePatterns(patterns: Pattern[]): void;
+  queryRelatedPatterns(context: Context): Pattern[];
+  updateEfficiencyMetrics(metrics: Metrics): void;
+  suggestConnections(workflow: Workflow): Suggestions;
+}
+```
+
+## Optimization Strategies
+
+### 1. Command Optimization
+- Detect frequently used commands
+- Suggest shortcuts and aliases
+- Create command chains
+- Optimize parameter usage
+
+### 2. Workflow Optimization
+- Identify repetitive patterns
+- Suggest automation opportunities
+- Create workflow templates
+- Optimize task sequences
+
+### 3. Resource Optimization
+- Monitor resource usage
+- Optimize memory allocation
+- Improve cache utilization
+- Balance workload distribution
+
+## Success Metrics
+
+### 1. Efficiency Metrics
+- Time saved per optimization
+- Reduction in repetitive tasks
+- Improved workflow completion time
+- Resource utilization improvement
+
+### 2. Learning Metrics
+- Pattern recognition accuracy
+- Optimization success rate
+- Adaptation effectiveness
+- User satisfaction score
+
+## Monitoring & Maintenance
+
+### 1. Performance Monitoring
+```typescript
+interface PerformanceMonitor {
+  metrics: MetricCollection;
+  thresholds: ThresholdSettings;
+  alerts: AlertConfiguration;
+  
+  trackMetrics(): void;
+  analyzePerformance(): Analysis;
+  generateReports(): Report;
+  triggerAlerts(): void;
+}
+```
+
+### 2. Health Checks
+- Daily system validation
+- Weekly performance review
+- Monthly optimization audit
+- Quarterly strategy update
+
+## Documentation & Reporting
+
+### 1. Workflow Documentation
+- Pattern catalogs
+- Optimization guides
+- Best practices
+- User tutorials
+
+### 2. Performance Reports
+- Efficiency gains
+- Learning progress
+- Resource utilization
+- User adoption metrics
+
+## Future Enhancements
+
+### 1. Advanced Features
+- [ ] AI-powered optimization suggestions
+- [ ] Predictive workflow adaptation
+- [ ] Cross-project pattern learning
+- [ ] Collaborative optimization sharing
+
+### 2. Integration Expansions
+- [ ] Version control integration
+- [ ] CI/CD pipeline optimization
+- [ ] Team collaboration features
+- [ ] External tool integration 

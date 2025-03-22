@@ -1,0 +1,294 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Personal Workflow Tracking System
+
+## Overview
+
+**Priority**: P1  
+**Status**: NOT STARTED  
+**Tags**: #integration #metrics #productivity #workflow
+
+This task focuses on implementing a comprehensive system for recording, analyzing, and sharing development workflows within the Ollama ecosystem. The system will track user activities, extract meaningful metrics, and provide integration points for agents and other components.
+
+## Timeline
+
+**Week 1**: Research and Architecture  
+**Week 2**: Core Implementation  
+**Week 3**: Integration and Testing
+
+## Detailed Description
+
+The Personal Workflow Tracking System will enhance the Ollama ecosystem by providing detailed insights into development patterns, productivity metrics, and workflow optimization opportunities. The system will record user activities across the terminal, editor, and application interfaces while providing privacy controls and data filtering capabilities.
+
+### Core Components
+
+#### 1. Activity Recording Engine
+
+- **Command Tracking**
+  - Terminal command history with context
+  - Command execution results and status
+  - Execution environment details
+  - Command timing and performance metrics
+
+- **Editor Activity Tracking**
+  - File open/close events
+  - Edit patterns and frequency
+  - Navigation patterns
+  - Clipboard operations
+  - Search and replace patterns
+
+- **Application Usage Tracking**
+  - Application focus time
+  - Context switching frequency
+  - Feature usage patterns
+  - UI interaction flows
+  - Idle time analysis
+
+#### 2. Metrics Analysis System
+
+- **Productivity Metrics**
+  - Active coding time
+  - Command efficiency scores
+  - Context switching overhead
+  - Task completion velocity
+  - Feature usage optimization
+
+- **Pattern Recognition**
+  - Workflow pattern detection
+  - Repetitive task identification
+  - Automation opportunity discovery
+  - Productivity bottleneck detection
+  - Best practice alignment
+
+- **Comparative Analysis**
+  - Historical trend analysis
+  - Peer benchmarking (opt-in)
+  - Industry standard comparison
+  - Before/after optimization metrics
+  - Learning curve progression
+
+#### 3. Integration and Sharing
+
+- **Agent Integration**
+  - Context provision for AI agents
+  - Learning from efficient workflows
+  - Personalized suggestions
+  - Adaptive assistance based on workflow
+  - Context-aware tool recommendations
+
+- **Sharing Mechanisms**
+  - Workflow export formats
+  - Team sharing capabilities
+  - Anonymized data aggregation
+  - Best practice libraries
+  - Workflow demonstration recordings
+
+- **Privacy Controls**
+  - Granular data collection settings
+  - Sensitive data filtering
+  - Local-first storage
+  - Encryption for shared data
+  - Data retention policies
+
+## Implementation Plan
+
+### Week 1: Research and Architecture
+
+- [ ] Research existing workflow tracking solutions
+- [ ] Define data collection scope and boundaries
+- [ ] Design privacy-first architecture
+- [ ] Create data models for activity tracking
+- [ ] Design metrics calculation framework
+- [ ] Plan integration points with existing systems
+- [ ] Create architecture diagrams and documentation
+- [ ] Design database schema for metrics storage
+- [ ] Define API contracts for system integration
+
+### Week 2: Core Implementation
+
+- [ ] Implement terminal command tracking
+  - [ ] Command history recording
+  - [ ] Execution context capture
+  - [ ] Performance metrics collection
+  - [ ] Result status tracking
+
+- [ ] Develop editor activity tracking
+  - [ ] File operation hooks
+  - [ ] Edit pattern recording
+  - [ ] Navigation tracking
+  - [ ] Timing and frequency analysis
+
+- [ ] Create metrics analysis engine
+  - [ ] Raw data processing pipeline
+  - [ ] Pattern detection algorithms
+  - [ ] Productivity scoring system
+  - [ ] Trend analysis capabilities
+  - [ ] Visualization data preparation
+
+- [ ] Implement data storage and management
+  - [ ] Local database implementation
+  - [ ] Data aggregation mechanisms
+  - [ ] Privacy filtering system
+  - [ ] Data export capabilities
+  - [ ] Backup and recovery processes
+
+### Week 3: Integration and Testing
+
+- [ ] Integrate with existing systems
+  - [ ] CLI Engine integration
+  - [ ] Knowledge Graph connections
+  - [ ] Context Router hooks
+  - [ ] Agent awareness interfaces
+  - [ ] Visualization system integration
+
+- [ ] Implement sharing mechanisms
+  - [ ] Team sharing protocols
+  - [ ] Export format generators
+  - [ ] Workflow replay capabilities
+  - [ ] Collaboration features
+  - [ ] Best practice libraries
+
+- [ ] Create visualization and reporting
+  - [ ] Dashboard for personal metrics
+  - [ ] Workflow pattern visualizations
+  - [ ] Productivity trend charts
+  - [ ] Optimization opportunity displays
+  - [ ] Comparative analysis views
+
+- [ ] Comprehensive testing
+  - [ ] Performance impact testing
+  - [ ] Privacy compliance verification
+  - [ ] Data accuracy validation
+  - [ ] Integration functionality testing
+  - [ ] User experience evaluation
+
+## Dependencies
+
+- CLI Engine
+- Knowledge Graph
+- Context Router
+- TokenManager
+- Local Database System
+- Visualization Framework
+
+## Success Metrics
+
+### System Performance
+- Activity tracking with <5% performance impact
+- Data processing latency <100ms
+- Storage efficiency with <10MB per day
+- Query response time <50ms
+- Real-time metrics calculation
+
+### User Experience
+- Seamless integration with existing workflow
+- Intuitive metric visualizations
+- Easy sharing mechanisms
+- Clear privacy controls
+- Minimal setup requirements
+
+### Productivity Improvements
+- Measurable workflow optimization (>15%)
+- Reduction in repetitive tasks (>20%)
+- Improved context retention in agents (>30%)
+- Better collaboration through shared patterns
+- Accelerated onboarding for new team members
+
+## Risk Mitigation
+
+### Technical Risks
+- **Performance Impact**: Implement selective recording and sampling
+- **Data Security**: Use encryption and local-first storage
+- **Integration Complexity**: Create well-defined abstraction layers
+- **Accuracy Concerns**: Implement validation and calibration mechanisms
+
+### Operational Risks
+- **Privacy Concerns**: Provide granular opt-in controls and transparency
+- **Adoption Resistance**: Focus on immediate value and clear benefits
+- **Data Volume Management**: Implement intelligent aggregation and pruning
+- **Tool Overhead**: Ensure seamless integration with minimal friction
+
+## Research Notes
+
+### Activity Tracking Approaches
+
+| Approach | Pros | Cons | Integration Complexity |
+|----------|------|------|----------------------|
+| Shell Hooks | Native integration | Limited scope | Low |
+| Editor Extensions | Comprehensive | Platform-specific | Medium |
+| System Monitoring | Complete coverage | Privacy concerns | High |
+| Hybrid Approach | Balanced coverage | Complex coordination | Medium-High |
+
+### Metrics Calculation Strategies
+
+| Strategy | Application | Benefits | Challenges |
+|----------|-------------|----------|------------|
+| Real-time | Immediate feedback | Resource intensive | Complex implementation |
+| Batch Processing | Efficient resources | Delayed insights | Simpler architecture |
+| Hybrid Processing | Balanced approach | Complexity | Moderate resources |
+
+## Integration Points
+
+### CLI Tracking Integration
+
+```typescript
+interface CommandTracker {
+  recordCommand(command: string, context: CommandContext): void;
+  recordResult(result: CommandResult, metrics: ExecutionMetrics): void;
+  getCommandHistory(filters?: HistoryFilters): Promise<Command[]>;
+  analyzePatterns(timeframe: Timeframe): Promise<PatternAnalysis>;
+}
+
+interface CommandContext {
+  workingDirectory: string;
+  environment: Record<string, string>;
+  shellType: string;
+  timestamp: Date;
+  sessionId: string;
+}
+```
+
+### Editor Activity Interface
+
+```typescript
+interface EditorActivityTracker {
+  recordFileOperation(operation: FileOperation): void;
+  recordEditAction(action: EditAction): void;
+  recordNavigation(navigation: NavigationAction): void;
+  getActivitySummary(timeframe: Timeframe): Promise<ActivitySummary>;
+  detectPatterns(timeframe: Timeframe): Promise<EditorPatternAnalysis>;
+}
+
+interface EditAction {
+  fileId: string;
+  position: Position;
+  type: 'insert' | 'delete' | 'replace' | 'format';
+  content?: string;
+  timestamp: Date;
+  duration?: number;
+}
+```
+
+### Agent Integration Interface
+
+```typescript
+interface WorkflowContext {
+  recentCommands: Command[];
+  frequentPatterns: Pattern[];
+  currentFocus: FocusArea;
+  productivityMetrics: ProductivityMetrics;
+  recommendedTools: Tool[];
+  getContextualSuggestions(task: string): Promise<Suggestion[]>;
+}
+```
+
+## References
+
+- [CLI Engine Documentation](mdc:OSPAiN2/OSPAiN2/OSPAiN2/docs/cli_engine.md)
+- [Context Router Architecture](mdc:OSPAiN2/OSPAiN2/OSPAiN2/docs/context_router.md)
+- [Knowledge Graph Integration Guide](mdc:OSPAiN2/OSPAiN2/OSPAiN2/docs/knowledge_graph.md)
+- [Privacy Design Guidelines](mdc:OSPAiN2/OSPAiN2/OSPAiN2/docs/privacy_guidelines.md)
+- [Metrics Calculation Reference](mdc:OSPAiN2/OSPAiN2/OSPAiN2/docs/metrics_calculation.md) 

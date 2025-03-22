@@ -1,0 +1,57 @@
+{
+  "server": {
+    "name": "WaldzellAI Clear-Thought",
+    "version": "1.0.0",
+    "description": "Advanced problem-solving capabilities through systematic thinking"
+  },
+  "mental_models": {
+    "enabled": true,
+    "default_models": [
+      "first_principles",
+      "second_order",
+      "inversion",
+      "systems_thinking",
+      "decision_matrix",
+      "feedback_loops",
+      "probabilistic",
+      "opportunity_costs"
+    ],
+    "custom_models_path": "./mental_models"
+  },
+  "sequential_thinking": {
+    "max_thoughts": 10,
+    "allow_revisions": true,
+    "allow_branching": true,
+    "track_uncertainty": true,
+    "verification_required": true
+  },
+  "integration": {
+    "knowledge_graph": {
+      "enabled": true,
+      "sync_interval": 300
+    },
+    "token_manager": {
+      "enabled": true,
+      "optimize_prompts": true
+    },
+    "agent_forge": {
+      "enabled": true,
+      "workflow_integration": true
+    }
+  },
+  "templates": {
+    "path": "./templates",
+    "auto_select": true,
+    "default_template": "problem_decomposition"
+  },
+  "logging": {
+    "level": "info",
+    "file": "clear-thought.log",
+    "include_timestamps": true
+  },
+  "debug": {
+    "enabled": false,
+    "verbose": false,
+    "save_thought_process": true
+  }
+}
